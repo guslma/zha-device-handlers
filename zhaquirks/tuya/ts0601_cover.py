@@ -621,6 +621,7 @@ class TuyaCloneCover0601(TuyaWindowCover):
         }
     }
 
+
 class NovaDigitalSmartCoverTS0105(TuyaWindowCover):
     """Nova Digital motor Tuya TS0105 (_TZE600_ogyg1y6b_)."""
 
