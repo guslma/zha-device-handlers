@@ -1,7 +1,7 @@
 """Tuya based cover and blinds."""
 
 from zigpy.profiles import zha
-from zigpy.zcl.clusters.general import Basic, Groups, Identify, OnOff, Ota, Scenes, Time
+from zigpy.zcl.clusters.general import Basic, Identify, Ota, Time
 
 from zhaquirks.const import (
     DEVICE_TYPE,
@@ -17,6 +17,7 @@ from zhaquirks.tuya import (
     TuyaWindowCover,
     TuyaWindowCoverControl,
 )
+
 
 class NovaDigitalSmartCoverTS0105(TuyaWindowCover):
     """Nova Digital motor Tuya TS0105 (_TZE600_ogyg1y6b_)."""
