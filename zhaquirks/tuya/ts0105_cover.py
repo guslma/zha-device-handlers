@@ -20,7 +20,7 @@ from zhaquirks.tuya import (
 
 
 class NovaDigitalSmartCoverTS0105(TuyaWindowCover):
-    """Nova Digital motor Tuya TS0105 (_TZE600_ogyg1y6b_)."""
+    """Tuya Nova Digital motor TS0105 (_TZE600_ogyg1y6b_)."""
 
     signature = {
         MODELS_INFO: [
