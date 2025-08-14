@@ -2,28 +2,30 @@ from zigpy.profiles import zha
 from zigpy.quirks import CustomDevice
 from zigpy.zcl.clusters.general import (
     Basic,
-    Identify,
     Groups,
-    Scenes,
-    OnOff,
+    Identify,
     LevelControl,
-    Time,
+    OnOff,
     Ota,
+    Scenes,
+    Time,
 )
 from zigpy.zcl.clusters.manufacturer_specific import ManufacturerSpecificCluster
 
-class SafeOnOffCluster(OnOff):
 
+class SafeOnOffCluster(OnOff):
     def _update_attribute(self, attrid, value):
         if attrid == 0x0000 and value == 0:
             self.debug("Ignorando OFF automático")
             return  # Bloqueia o OFF
         super()._update_attribute(attrid, value)
 
+
 class TuyaManufCluster(ManufacturerSpecificCluster):
     cluster_id = 0xEF00
     name = "tuya_manufacturer"
     ep_attribute = "tuya_manufacturer"
+
 
 class TS110E(CustomDevice):
     """Quirk for Tuya TS110E Dimmer."""
