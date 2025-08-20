@@ -28,14 +28,11 @@ from zhaquirks.tuya import TuyaManufCluster
 class SafeOnOffCluster(OnOff, CustomCluster):
     """Safe OnOff cluster for Tuya TS110E Dimmer that blocks automatic OFF."""
 
-    manufacturer_attributes = {}  # permite atributos customizados
-
-    def cluster_command(self, tsn, command_id, args):
-        # Ignora OFF automático enviado pelo Tuya
-        if command_id == 0x00 and args == [0]:  # comando OFF com valor 0
-            self.debug("Ignorando OFF automático via cluster_command")
-            return  # bloqueia execução
-        return super().cluster_command(tsn, command_id, args)
+    def _update_attribute(self, attrid, value):
+        if attrid == 0x0000 and value == 0:
+            self.debug("Ignorando OFF automático")
+            return  # Bloqueia o OFF
+        super()._update_attribute(attrid, value)
 
 
 class DimmerSwitch(CustomDevice):
