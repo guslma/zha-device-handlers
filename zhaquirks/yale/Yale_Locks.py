@@ -1,7 +1,7 @@
 """Device handler for Yale."""
 
 from zigpy.profiles import zha
-from zigpy.quirks import CustomCluster, CustomDevice
+from zigpy.quirks import CustomDevice
 from zigpy.zcl.clusters.closures import DoorLock
 from zigpy.zcl.clusters.general import (
     Alarms,
@@ -21,6 +21,7 @@ from zhaquirks.const import (
     PROFILE_ID,
 )
 
+from zigpy.quirks import CustomCluster
 
 class YaleCluster(CustomCluster):
     """Proprietary Yale cluster (0x100F)."""
@@ -28,7 +29,6 @@ class YaleCluster(CustomCluster):
     cluster_id = 0x100F
     name = "Yale Proprietary Cluster"
     ep_attribute = "yale_cluster"
-
 
 class YaleLock(CustomDevice):
     """Yale YDM60 / YMC 420 D Locks."""
@@ -74,7 +74,7 @@ class YaleLock(CustomDevice):
                     Time.cluster_id,
                     DoorLock.cluster_id,
                     PowerConfiguration.cluster_id,
-                    YaleCluster.cluster_id,
+                    YaleCluster,
                 ],
                 OUTPUT_CLUSTERS: [
                     Basic.cluster_id,
@@ -84,8 +84,9 @@ class YaleLock(CustomDevice):
                     Time.cluster_id,
                     DoorLock.cluster_id,
                     PowerConfiguration.cluster_id,
-                    YaleCluster.cluster_id,
+                    YaleCluster,
                 ],
+
             }
         }
     }
