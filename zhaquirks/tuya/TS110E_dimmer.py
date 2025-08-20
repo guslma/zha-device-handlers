@@ -1,7 +1,7 @@
 """Quirk for Tuya TS110E Dimmer."""
 
 from zigpy.profiles import zgp, zha
-from zigpy.quirks import CustomDevice
+from zigpy.quirks import CustomDevice, CustomCluster
 from zigpy.zcl.clusters.general import (
     Basic,
     GreenPowerProxy,
@@ -25,7 +25,7 @@ from zhaquirks.const import (
 from zhaquirks.tuya import TuyaManufCluster
 
 
-class SafeOnOffCluster(OnOff):
+class SafeOnOffCluster(OnOff, CustomCluster):
     """Safe OnOff for Tuya Dimmer that ignores auto-OFF."""
 
     def _update_attribute(self, attrid, value):
