@@ -1,7 +1,10 @@
-from zigpy.profiles import zha
-from zigpy.quirks import CustomDevice
+"""Quirk for Tuya TS110E Dimmer."""
+
+from zigpy.profiles import zgp, zha
+from zigpy.quirks import CustomCluster, CustomDevice
 from zigpy.zcl.clusters.general import (
     Basic,
+    GreenPowerProxy,
     Groups,
     Identify,
     LevelControl,
@@ -10,79 +13,86 @@ from zigpy.zcl.clusters.general import (
     Scenes,
     Time,
 )
-from zigpy.zcl.clusters.manufacturer_specific import ManufacturerSpecificCluster
+from zhaquirks.tuya import TuyaManufCluster
+from zhaquirks import NoReplyMixin
+from zhaquirks.const import (
+    DEVICE_TYPE,
+    ENDPOINTS,
+    INPUT_CLUSTERS,
+    MODELS_INFO,
+    OUTPUT_CLUSTERS,
+    PROFILE_ID,
+)
 
 
-class SafeOnOffCluster(OnOff):
-    def _update_attribute(self, attrid, value):
-        if attrid == 0x0000 and value == 0:
-            self.debug("Ignorando OFF automático")
-            return  # Bloqueia o OFF
-        super()._update_attribute(attrid, value)
+class SafeOnOff(NoReplyMixin, CustomCluster, OnOff):
+    """Custom On/Off cluster that ignores missing replies."""
 
+    void_input_commands = {cmd.id for cmd in OnOff.commands_by_name.values()}
 
-class TuyaManufCluster(ManufacturerSpecificCluster):
-    cluster_id = 0xEF00
-    name = "tuya_manufacturer"
-    ep_attribute = "tuya_manufacturer"
-
-
-class TS110E(CustomDevice):
+class DimmerSwitch(CustomDevice):
     """Quirk for Tuya TS110E Dimmer."""
 
     signature = {
-        "models_info": [("_TZ3210_ysfo0wla", "TS110E")],
-        "endpoints": {
+        MODELS_INFO: [("_TZ3210_ysfo0wla", "TS110E")],
+        ENDPOINTS: {
+            #  <SimpleDescriptor endpoint=1 profile=260 device_type=257
+            #  input_clusters=[0, 3, 4, 5, 6, 8, 61184]
+            #  output_clusters=[10, 25]>
             1: {
-                "profile_id": zha.PROFILE_ID,
-                "device_type": 0x0101,
-                "input_clusters": [
+                PROFILE_ID: zha.PROFILE_ID,
+                DEVICE_TYPE: zha.DeviceType.DIMMABLE_LIGHT,
+                INPUT_CLUSTERS: [
                     Basic.cluster_id,
                     Identify.cluster_id,
                     Groups.cluster_id,
                     Scenes.cluster_id,
                     OnOff.cluster_id,
                     LevelControl.cluster_id,
-                    0xEF00,
+                    TuyaManufCluster.cluster_id,
                 ],
-                "output_clusters": [
+                OUTPUT_CLUSTERS: [
                     Time.cluster_id,
                     Ota.cluster_id,
                 ],
             },
-            242: {
-                "profile_id": 0xA1E0,
-                "device_type": 0x0061,
-                "input_clusters": [],
-                "output_clusters": [0x0021],
+            #  <SimpleDescriptor endpoint=242 profile=41376 device_type=97
+            #  input_clusters=[]
+            #  output_clusters=[33]>
+           242: {
+                
+                PROFILE_ID: zgp.PROFILE_ID,
+                DEVICE_TYPE: zgp.DeviceType.PROXY_BASIC,
+                INPUT_CLUSTERS: [],
+                OUTPUT_CLUSTERS: [GreenPowerProxy.cluster_id],
             },
         },
     }
 
     replacement = {
-        "endpoints": {
+        ENDPOINTS: {
             1: {
-                "profile_id": zha.PROFILE_ID,
-                "device_type": 0x0101,
-                "input_clusters": [
+                PROFILE_ID: zha.PROFILE_ID,
+                DEVICE_TYPE: zha.DeviceType.DIMMABLE_LIGHT,
+                INPUT_CLUSTERS: [
                     Basic.cluster_id,
                     Identify.cluster_id,
                     Groups.cluster_id,
                     Scenes.cluster_id,
-                    SafeOnOffCluster,  # substitui OnOff padrão
+                    SafeOnOff,
                     LevelControl.cluster_id,
-                    TuyaManufCluster,
+                    TuyaManufCluster.cluster_id,
                 ],
-                "output_clusters": [
+                OUTPUT_CLUSTERS: [
                     Time.cluster_id,
                     Ota.cluster_id,
                 ],
             },
             242: {
-                "profile_id": 0xA1E0,
-                "device_type": 0x0061,
-                "input_clusters": [],
-                "output_clusters": [0x0021],
+                PROFILE_ID: zgp.PROFILE_ID,
+                DEVICE_TYPE: zgp.DeviceType.PROXY_BASIC,
+                INPUT_CLUSTERS: [],
+                OUTPUT_CLUSTERS: [GreenPowerProxy.cluster_id],
             },
         }
     }
