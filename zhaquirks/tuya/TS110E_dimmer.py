@@ -13,7 +13,7 @@ from zigpy.zcl.clusters.general import (
     Scenes,
     Time,
 )
-
+from zhaquirks.tuya import TuyaManufCluster
 from zhaquirks import NoReplyMixin
 from zhaquirks.const import (
     DEVICE_TYPE,
@@ -23,14 +23,16 @@ from zhaquirks.const import (
     OUTPUT_CLUSTERS,
     PROFILE_ID,
 )
-from zhaquirks.tuya import TuyaManufCluster
 
 
-class SafeOnOff(NoReplyMixin, CustomCluster, OnOff):
-    """Custom On/Off cluster that ignores missing replies."""
+class SafeOnOffCluster(OnOff):
+    """Safe OnOff for Tuya Dimmer that ignores auto-OFF."""
 
-    void_input_commands = {cmd.id for cmd in OnOff.commands_by_name.values()}
-
+    def _update_attribute(self, attrid, value):
+        if attrid == 0x0000 and value == 0:
+            self.debug("Ignorando OFF automático")
+            return  # Bloqueia o OFF
+        super()._update_attribute(attrid, value)
 
 class DimmerSwitch(CustomDevice):
     """Quirk for Tuya TS110E Dimmer."""
@@ -61,7 +63,8 @@ class DimmerSwitch(CustomDevice):
             #  <SimpleDescriptor endpoint=242 profile=41376 device_type=97
             #  input_clusters=[]
             #  output_clusters=[33]>
-            242: {
+           242: {
+                
                 PROFILE_ID: zgp.PROFILE_ID,
                 DEVICE_TYPE: zgp.DeviceType.PROXY_BASIC,
                 INPUT_CLUSTERS: [],
@@ -80,7 +83,7 @@ class DimmerSwitch(CustomDevice):
                     Identify.cluster_id,
                     Groups.cluster_id,
                     Scenes.cluster_id,
-                    SafeOnOff,
+                    SafeOnOffCluster,
                     LevelControl.cluster_id,
                     TuyaManufCluster.cluster_id,
                 ],
