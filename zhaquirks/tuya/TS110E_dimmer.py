@@ -1,7 +1,7 @@
 """Quirk for Tuya TS110E Dimmer."""
 
 from zigpy.profiles import zgp, zha
-from zigpy.quirks import CustomDevice, CustomCluster
+from zigpy.quirks import CustomCluster, CustomDevice
 from zigpy.zcl.clusters.general import (
     Basic,
     GreenPowerProxy,
