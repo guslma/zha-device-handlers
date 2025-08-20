@@ -21,14 +21,12 @@ from zhaquirks.const import (
     PROFILE_ID,
 )
 
-
 class YaleCluster(CustomCluster):
     """Proprietary Yale cluster (0x100F)."""
 
     cluster_id = 0x100F
     name = "Yale Proprietary Cluster"
     ep_attribute = "yale_cluster"
-
 
 class YaleLock(CustomDevice):
     """Yale YDM60 / YMC 420 D Locks."""
@@ -86,6 +84,7 @@ class YaleLock(CustomDevice):
                     PowerConfiguration.cluster_id,
                     YaleCluster,
                 ],
+
             }
         }
     }
