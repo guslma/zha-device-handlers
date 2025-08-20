@@ -25,7 +25,7 @@ from zhaquirks.const import (
 class YaleCluster(CustomCluster):
     """Proprietary Yale cluster (0x100F)."""
 
-    cluster_id = 0x100F  # 4111
+    cluster_id = 0x100F
     name = "Yale Proprietary Cluster"
     ep_attribute = "yale_cluster"
 
