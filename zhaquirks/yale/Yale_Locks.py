@@ -1,10 +1,16 @@
 """Device handler for Yale."""
 
 from zigpy.profiles import zha
-from zigpy.quirks import CustomDevice
+from zigpy.quirks import CustomCluster, CustomDevice
 from zigpy.zcl.clusters.closures import DoorLock
-from zigpy.zcl.clusters.general import Basic, Time, Identify, Groups, PowerConfiguration, Alarms
-
+from zigpy.zcl.clusters.general import (
+    Alarms,
+    Basic,
+    Groups,
+    Identify,
+    PowerConfiguration,
+    Time,
+)
 
 from zhaquirks.const import (
     DEVICE_TYPE,
@@ -15,7 +21,6 @@ from zhaquirks.const import (
     PROFILE_ID,
 )
 
-from zigpy.quirks import CustomCluster
 
 class YaleCluster(CustomCluster):
     cluster_id = 0x100F  # 4111
@@ -79,7 +84,6 @@ class YaleLock(CustomDevice):
                     PowerConfiguration.cluster_id,
                     YaleCluster.cluster_id,
                 ],
-
             }
         }
     }
