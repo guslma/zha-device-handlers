@@ -85,7 +85,7 @@ class DimmerSwitch(CustomDevice):
                     Scenes.cluster_id,
                     SafeOnOffCluster,
                     LevelControl.cluster_id,
-                    TuyaManufCluster.cluster_id,
+                    TuyaManufCluster,
                 ],
                 OUTPUT_CLUSTERS: [
                     Time.cluster_id,
