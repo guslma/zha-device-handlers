@@ -3,14 +3,8 @@
 from zigpy.profiles import zha
 from zigpy.quirks import CustomDevice
 from zigpy.zcl.clusters.closures import DoorLock
-from zigpy.zcl.clusters.general import (
-    Alarms,
-    Basic,
-    Groups,
-    Identify,
-    PowerConfiguration,
-    Time,
-)
+from zigpy.zcl.clusters.general import Basic, Time, Identify, Groups, PowerConfiguration, Alarms
+
 
 from zhaquirks.const import (
     DEVICE_TYPE,
@@ -21,8 +15,15 @@ from zhaquirks.const import (
     PROFILE_ID,
 )
 
+from zigpy.quirks import CustomCluster
 
-class YDM60YMC420D(CustomDevice):
+class YaleCluster(CustomCluster):
+    cluster_id = 0x100F  # 4111
+    name = "Yale Proprietary Cluster"
+    ep_attribute = "yale_cluster"
+
+
+class YaleLock(CustomDevice):
     """Yale YDM60 / YMC 420 D Locks."""
 
     signature = {
@@ -40,14 +41,14 @@ class YDM60YMC420D(CustomDevice):
                     Identify.cluster_id,
                     Groups.cluster_id,
                     DoorLock.cluster_id,
-                    0x100F,
+                    YaleCluster.cluster_id,
                 ],
                 OUTPUT_CLUSTERS: [
                     Basic.cluster_id,
                     Identify.cluster_id,
                     Groups.cluster_id,
                     DoorLock.cluster_id,
-                    0x100F,
+                    YaleCluster.cluster_id,
                 ],
             }
         },
@@ -66,7 +67,7 @@ class YDM60YMC420D(CustomDevice):
                     Time.cluster_id,
                     DoorLock.cluster_id,
                     PowerConfiguration.cluster_id,
-                    0x100F,
+                    YaleCluster.cluster_id,
                 ],
                 OUTPUT_CLUSTERS: [
                     Basic.cluster_id,
@@ -76,8 +77,9 @@ class YDM60YMC420D(CustomDevice):
                     Time.cluster_id,
                     DoorLock.cluster_id,
                     PowerConfiguration.cluster_id,
-                    0x100F,
+                    YaleCluster.cluster_id,
                 ],
+
             }
         }
     }
