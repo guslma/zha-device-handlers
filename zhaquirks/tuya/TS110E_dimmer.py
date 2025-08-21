@@ -34,6 +34,7 @@ class SafeOnOffCluster(OnOff, CustomCluster):
             return  # Bloqueia o OFF
         super()._update_attribute(attrid, value)
 
+
 class DimmerSwitch(CustomDevice):
     """Quirk for Tuya TS110E Dimmer."""
 
