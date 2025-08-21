@@ -3,25 +3,18 @@ from unittest.mock import MagicMock, patch
 import pytest
 from zigpy.endpoint import Endpoint
 
-# Importe as classes necessárias do zigpy
 from zigpy.zcl.clusters.general import OnOff
 
-# Importe a classe SafeOnOffCluster do seu arquivo TS110E_dimmer.py
 from zhaquirks.tuya.TS110E_dimmer import SafeOnOffCluster
 
 
 @pytest.fixture
 def safe_on_off_cluster():
     """Fixture para criar uma instância de SafeOnOffCluster com um mock de OnOff."""
-    # Crie um mock para o endpoint
     mock_endpoint = MagicMock(spec=Endpoint)
-    # Crie uma instância de SafeOnOffCluster, que herda de OnOff e CustomCluster
     cluster = SafeOnOffCluster(mock_endpoint)
-    # Adicione a lista para rastrear as atualizações de atributos
     cluster.attribute_updates = []
 
-    # Faça o patch do método _update_attribute da classe pai (OnOff)
-    # para que possamos rastrear as chamadas a super()._update_attribute
     original_update_attribute = OnOff._update_attribute
 
     def mocked_update_attribute(self, attrid, value):
