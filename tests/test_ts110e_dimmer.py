@@ -1,6 +1,5 @@
-from unittest.mock import MagicMock
-
 import pytest
+from unittest.mock import MagicMock, patch
 from zigpy.endpoint import Endpoint
 
 # Importe as classes necessárias do zigpy
