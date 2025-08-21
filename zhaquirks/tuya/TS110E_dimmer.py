@@ -30,7 +30,7 @@ class SafeOnOffCluster(OnOff, CustomCluster):
 
     def _update_attribute(self, attrid, value):
         if attrid == 0x0000 and value == 0:
-            self.debug("Ignoring automatic OFF")
+            self.debug("Automatic off is ignored")
             return
         super()._update_attribute(attrid, value)
 
