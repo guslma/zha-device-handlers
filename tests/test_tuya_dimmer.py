@@ -297,3 +297,35 @@ async def test_doubledimmer_state_report(zigpy_device_from_quirk, quirk):
     assert len(dimmer2_listener.attribute_updates) == 2
     assert dimmer2_listener.attribute_updates[1][0] == 0x0000
     assert dimmer2_listener.attribute_updates[1][1] == 170
+
+@pytest.mark.parametrize(
+    "quirk", (zhaquirks.tuya.ts110e_dimmer.DimmerSwitch,)  # seu quirk novo
+)
+async def test_safe_onoffcluster_blocks_off(zigpy_device_from_quirk, quirk):
+    """Test that SafeOnOffCluster ignores OFF reports/commands."""
+
+    dev = zigpy_device_from_quirk(quirk)
+    onoff_cluster = dev.endpoints[1].on_off
+    listener = ClusterListener(onoff_cluster)
+
+    # 1. OFF report deve ser ignorado
+    onoff_cluster._update_attribute(0x0000, 0)
+    assert listener.attribute_updates == []  # nada reportado
+    assert onoff_cluster._attr_cache.get(0x0000) is None
+
+    # 2. ON report deve ser aceito
+    onoff_cluster._update_attribute(0x0000, 1)
+    assert onoff_cluster._attr_cache[0x0000] == 1
+
+    # 3. OFF via attribute_updated também deve ser ignorado
+    onoff_cluster.attribute_updated(0x0000, 0)
+    assert onoff_cluster._attr_cache[0x0000] == 1  # não mudou
+
+    # 4. ON via attribute_updated deve atualizar
+    onoff_cluster.attribute_updated(0x0000, 1)
+    assert onoff_cluster._attr_cache[0x0000] == 1
+
+    # 5. Comando OFF deve ser bloqueado
+    res = await onoff_cluster.command(0x00)
+    assert res is None
+
