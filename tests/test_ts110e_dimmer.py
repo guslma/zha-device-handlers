@@ -1,3 +1,5 @@
+"""Testes para o módulo TS110E_dimmer, focando na cobertura do SafeOnOffCluster."""
+
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -13,8 +15,6 @@ def safe_on_off_cluster():
     mock_endpoint = MagicMock(spec=Endpoint)
     cluster = SafeOnOffCluster(mock_endpoint)
     cluster.attribute_updates = []
-
-    original_update_attribute = OnOff._update_attribute
 
     def mocked_update_attribute(self, attrid, value):
         self.attribute_updates.append((attrid, value))
