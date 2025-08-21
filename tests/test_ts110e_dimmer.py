@@ -2,7 +2,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from zigpy.endpoint import Endpoint
-
 from zigpy.zcl.clusters.general import OnOff
 
 from zhaquirks.tuya.TS110E_dimmer import SafeOnOffCluster
