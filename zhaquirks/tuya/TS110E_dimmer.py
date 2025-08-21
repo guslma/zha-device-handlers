@@ -13,7 +13,7 @@ from zigpy.zcl.clusters.general import (
     Scenes,
     Time,
 )
-from zhaquirks.tuya import TuyaManufCluster
+
 from zhaquirks.const import (
     DEVICE_TYPE,
     ENDPOINTS,
@@ -22,6 +22,7 @@ from zhaquirks.const import (
     OUTPUT_CLUSTERS,
     PROFILE_ID,
 )
+from zhaquirks.tuya import TuyaManufCluster
 
 
 class DimmerSwitch(CustomDevice):
