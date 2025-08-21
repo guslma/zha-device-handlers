@@ -1,15 +1,16 @@
 import pytest
-from unittest.mock import MagicMock, patch
+
+# Importe as classes necessárias do zigpy, se elas não forem mockadas
+from zigpy.zcl.clusters.general import OnOff
 
 # Importe a classe SafeOnOffCluster do seu arquivo TS110E_dimmer.py
 # Certifique-se de que o caminho de importação esteja correto para o seu ambiente
 from zhaquirks.tuya.TS110E_dimmer import SafeOnOffCluster
 
-# Importe as classes necessárias do zigpy, se elas não forem mockadas
-from zigpy.zcl.clusters.general import OnOff
 
 class MockOnOffCluster(OnOff):
     """Um mock simplificado para a classe OnOff para capturar chamadas a _update_attribute."""
+
     def __init__(self):
         super().__init__()
         self.attribute_updates = []
@@ -17,11 +18,13 @@ class MockOnOffCluster(OnOff):
     def _update_attribute(self, attrid, value):
         self.attribute_updates.append((attrid, value))
 
+
 @pytest.fixture
 def safe_on_off_cluster():
     """Fixture para criar uma instância de SafeOnOffCluster com um mock de OnOff."""
     mock_parent_cluster = MockOnOffCluster()
     return SafeOnOffCluster(mock_parent_cluster)
+
 
 def test_safe_on_off_cluster_blocks_off_command(safe_on_off_cluster):
     """Testa se o comando OFF (attrid=0x0000, value=0) é bloqueado."""
@@ -29,6 +32,7 @@ def test_safe_on_off_cluster_blocks_off_command(safe_on_off_cluster):
     safe_on_off_cluster._update_attribute(0x0000, 0)
     # Verifica se nenhuma atualização foi passada para o cluster pai
     assert len(safe_on_off_cluster.attribute_updates) == 0
+
 
 def test_safe_on_off_cluster_allows_on_command(safe_on_off_cluster):
     """Testa se o comando ON (attrid=0x0000, value=1) é permitido."""
@@ -38,6 +42,7 @@ def test_safe_on_off_cluster_allows_on_command(safe_on_off_cluster):
     assert len(safe_on_off_cluster.attribute_updates) == 1
     assert safe_on_off_cluster.attribute_updates[0] == (0x0000, 1)
 
+
 def test_safe_on_off_cluster_allows_other_attributes(safe_on_off_cluster):
     """Testa se outros atributos são permitidos e passados."""
     # Simula uma atualização de outro atributo
@@ -45,6 +50,7 @@ def test_safe_on_off_cluster_allows_other_attributes(safe_on_off_cluster):
     # Verifica se a atualização foi passada para o cluster pai
     assert len(safe_on_off_cluster.attribute_updates) == 1
     assert safe_on_off_cluster.attribute_updates[0] == (0x0001, 100)
+
 
 # Se houver outras classes ou métodos no TS110E_dimmer.py que precisam de cobertura,
 # você precisaria adicionar testes para eles aqui.
@@ -60,4 +66,3 @@ def test_safe_on_off_cluster_allows_other_attributes(safe_on_off_cluster):
 #     device = DimmerSwitch()
 #     assert device.signature["MODELS_INFO"][0] == ("_TZ3210_ysfo0wla", "TS110E")
 #     assert device.signature["ENDPOINTS"][1]["PROFILE_ID"] == zha.PROFILE_ID
-
