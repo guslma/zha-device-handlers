@@ -2,7 +2,6 @@
 
 from zigpy.profiles import zha
 from zigpy.zcl.clusters.general import Basic, Identify, Ota, Time
-from zhaquirks.tuya import TuyaManufacturerWindowCover, TuyaManufCluster, TuyaWindowCover, TuyaWindowCoverControl
 
 from zhaquirks.const import (
     DEVICE_TYPE,
@@ -12,6 +11,13 @@ from zhaquirks.const import (
     OUTPUT_CLUSTERS,
     PROFILE_ID,
 )
+from zhaquirks.tuya import (
+    TuyaManufacturerWindowCover,
+    TuyaManufCluster,
+    TuyaWindowCover,
+    TuyaWindowCoverControl,
+)
+
 
 class SmartCover(TuyaWindowCover):
     """Nova Digital motor Tuya."""
