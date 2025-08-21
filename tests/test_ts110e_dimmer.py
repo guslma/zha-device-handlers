@@ -24,13 +24,13 @@ def safe_on_off_cluster():
 
 
 def test_safe_on_off_cluster_blocks_off_command(safe_on_off_cluster):
-    """Testa se o comando OFF (attrid=0x0000, value=0) é bloqueado."""
+    """Testa se o OFF (attrid=0x0000, value=0) é bloqueado."""
     safe_on_off_cluster._update_attribute(0x0000, 0)
     assert len(safe_on_off_cluster.attribute_updates) == 0
 
 
 def test_safe_on_off_cluster_allows_on_command(safe_on_off_cluster):
-    """Testa se o comando ON (attrid=0x0000, value=1) é permitido."""
+    """Testa se o ON (attrid=0x0000, value=1) é permitido."""
     safe_on_off_cluster._update_attribute(0x0000, 1)
     assert len(safe_on_off_cluster.attribute_updates) == 1
     assert safe_on_off_cluster.attribute_updates[0] == (0x0000, 1)
