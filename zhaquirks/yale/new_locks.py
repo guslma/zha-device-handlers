@@ -34,12 +34,12 @@ class YaleLock(CustomDevice):
     """Yale YDM60 / YMC 420 D Locks."""
 
     signature = {
-        #  <SimpleDescriptor endpoint=1 profile=260 device_type=10
-        #  device_version=0
-        #  input_clusters=[0, 3, 4, 257, 4111]
-        #  output_clusters=[0, 3, 4, 257, 4111]>
         MODELS_INFO: [("Yale", "YDM60"), ("Yale", "YMC 420 D")],
         ENDPOINTS: {
+            #  <SimpleDescriptor endpoint=1 profile=260 device_type=10
+            #  device_version=0
+            #  input_clusters=[0, 3, 4, 257, 4111]
+            #  output_clusters=[0, 3, 4, 257, 4111]>
             1: {
                 PROFILE_ID: zha.PROFILE_ID,
                 DEVICE_TYPE: zha.DeviceType.DOOR_LOCK,
