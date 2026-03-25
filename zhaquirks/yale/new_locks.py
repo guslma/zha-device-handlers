@@ -3,13 +3,7 @@
 from zigpy.profiles import zha
 from zigpy.quirks import CustomCluster, CustomDevice
 from zigpy.zcl.clusters.closures import DoorLock
-from zigpy.zcl.clusters.general import (
-    Basic,
-    Groups,
-    Identify,
-    PowerConfiguration,
-    Ota,
-)
+from zigpy.zcl.clusters.general import Basic, Groups, Identify, Ota, PowerConfiguration
 
 from zhaquirks.const import (
     DEVICE_TYPE,
