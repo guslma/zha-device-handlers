@@ -4,12 +4,11 @@ from zigpy.profiles import zha
 from zigpy.quirks import CustomCluster, CustomDevice
 from zigpy.zcl.clusters.closures import DoorLock
 from zigpy.zcl.clusters.general import (
-    Alarms,
     Basic,
     Groups,
     Identify,
     PowerConfiguration,
-    Time,
+    Ota,
 )
 
 from zhaquirks.const import (
@@ -36,10 +35,6 @@ class YaleLock(CustomDevice):
     signature = {
         MODELS_INFO: [("Yale", "YDM60"), ("Yale", "YMC 420 D")],
         ENDPOINTS: {
-            #  <SimpleDescriptor endpoint=1 profile=260 device_type=10
-            #  device_version=0
-            #  input_clusters=[0, 3, 4, 257, 4111]
-            #  output_clusters=[0, 3, 4, 257, 4111]>
             1: {
                 PROFILE_ID: zha.PROFILE_ID,
                 DEVICE_TYPE: zha.DeviceType.DOOR_LOCK,
@@ -70,8 +65,6 @@ class YaleLock(CustomDevice):
                     Basic.cluster_id,
                     Identify.cluster_id,
                     Groups.cluster_id,
-                    Alarms.cluster_id,
-                    Time.cluster_id,
                     DoorLock.cluster_id,
                     PowerConfiguration.cluster_id,
                     YaleCluster,
@@ -80,11 +73,9 @@ class YaleLock(CustomDevice):
                     Basic.cluster_id,
                     Identify.cluster_id,
                     Groups.cluster_id,
-                    Alarms.cluster_id,
-                    Time.cluster_id,
                     DoorLock.cluster_id,
-                    PowerConfiguration.cluster_id,
                     YaleCluster,
+                    Ota.cluster_id,
                 ],
             }
         }
