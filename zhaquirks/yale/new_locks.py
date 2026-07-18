@@ -96,6 +96,7 @@ class FixedDoorLock(CustomCluster, DoorLock):
 (
     QuirkBuilder("Yale", "YDM60")
     .also_applies_to("Yale", "YMC 420 D")
+    .also_applies_to("Yale", "YMC420")
     .replaces(FixedDoorLock, cluster_type=ClusterType.Server)
     .replaces(FixedDoorLock, cluster_type=ClusterType.Client)
     .replaces(YaleCluster, cluster_type=ClusterType.Server)
